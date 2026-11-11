@@ -74,7 +74,7 @@ class QuizGame:
         """state.json에서 데이터를 불러온다."""
         if not os.path.exists(STATE_FILE):
             print("저장된 데이터가 없어 기본 퀴즈로 시작합니다.")
-            self.quizzes = get_default_quizzes()
+            self.quizzes = Quiz.get_default_quizzes()
             self.best_score = 0
             self.history = []
             return
@@ -86,10 +86,10 @@ class QuizGame:
             self.best_score = int(data.get("best_score", 0))
             self.history = data.get("history", [])  # 히스토리 데이터 복원
             if not self.quizzes:
-                self.quizzes = get_default_quizzes()
+                self.quizzes = Quiz.get_default_quizzes()
         except (json.JSONDecodeError, KeyError, ValueError, TypeError) as e:
             print(f"[경고] 데이터 파일 손상 ({e}). 기본 데이터로 복구합니다.")
-            self.quizzes = get_default_quizzes()
+            self.quizzes = Quiz.get_default_quizzes()
             self.best_score = 0
             self.history = []
 
