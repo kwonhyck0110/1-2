@@ -1,9 +1,11 @@
 import json
 import os
+import shutil  # 파일 백업 생성을 위한 모듈 추가
 import random   # 난수 생성용 모듈 추가
 from datetime import datetime  # 날짜/시간 기록용 모듈 추가
 
 STATE_FILE = "state.json"
+BACKUP_FILE = "state.json.bak"
 
 # ======================================================
 # Quiz 클래스: 개별 퀴즈 하나를 표현
@@ -68,7 +70,7 @@ class QuizGame:
         self.history = []  # 점수 히스토리 리스트 추가
         self.load()
 
-# ---------- 파일 입출력 ----------
+# ---------- 파일 로드 및 백업 복구 ----------
 
     def load(self):
         """state.json에서 데이터를 불러온다."""
@@ -87,22 +89,41 @@ class QuizGame:
             self.history = data.get("history", [])  # 히스토리 데이터 복원
             if not self.quizzes:
                 self.quizzes = Quiz.get_default_quizzes()
-        except (json.JSONDecodeError, KeyError, ValueError, TypeError) as e:
-            print(f"[경고] 데이터 파일 손상 ({e}). 기본 데이터로 복구합니다.")
-            self.quizzes = Quiz.get_default_quizzes()
+
+        except PermissionError:
+            # 1. 권한 오류 처리 (PermissionError)
+            print("[오류] state.json 파일 읽기 권한이 없습니다. 권한을 확인해주세요.")
+            self.quizzes = get_default_quizzes()
             self.best_score = 0
             self.history = []
 
+        except (json.JSONDecodeError, KeyError, ValueError, TypeError) as e:
+            # 2. 데이터 손상 시 백업 생성 및 복구 절차
+            print(f"[경고] 데이터 파일이 손상되었습니다 ({e}).")
+            try:
+                shutil.copy(STATE_FILE, BACKUP_FILE)
+                print(f"[알림] 손상된 이전 파일은 '{BACKUP_FILE}'로 백업되었습니다.")
+            except Exception as backup_err:
+                print(f"[오류] 백업 생성 실패: {backup_err}")
+
+            print("기본 퀴즈 데이터로 복구하여 시작합니다.")
+            self.quizzes = get_default_quizzes()
+            self.best_score = 0
+            self.history = []
+# ---------- 파일 저장 및 권한 예외 처리 ----------
     def save(self):
-        """state.json 파일 저장"""
+        """현재 상태를 state.json에 저장"""
         data = {
             "quizzes": [q.to_dict() for q in self.quizzes],
             "best_score": self.best_score,
-            "history": self.history,  # 히스토리 데이터 추가 저장
+            "history": getattr(self, "history", []),
         }
         try:
             with open(STATE_FILE, "w", encoding="utf-8") as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
+        except PermissionError:
+            # 쓰기 권한 오류 처리
+            print("[오류] state.json 파일 쓰기 권한이 거부되었습니다. 저장할 수 없습니다.")
         except OSError as e:
             print(f"[오류] 저장 실패: {e}")
 
