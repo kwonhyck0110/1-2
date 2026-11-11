@@ -93,7 +93,7 @@ class QuizGame:
         except PermissionError:
             # 1. 권한 오류 처리 (PermissionError)
             print("[오류] state.json 파일 읽기 권한이 없습니다. 권한을 확인해주세요.")
-            self.quizzes = get_default_quizzes()
+            self.quizzes = Quiz.get_default_quizzes()
             self.best_score = 0
             self.history = []
 
@@ -107,7 +107,7 @@ class QuizGame:
                 print(f"[오류] 백업 생성 실패: {backup_err}")
 
             print("기본 퀴즈 데이터로 복구하여 시작합니다.")
-            self.quizzes = get_default_quizzes()
+            self.quizzes = Quiz.get_default_quizzes()
             self.best_score = 0
             self.history = []
 # ---------- 파일 저장 및 권한 예외 처리 ----------
