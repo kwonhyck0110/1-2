@@ -290,12 +290,12 @@ if __name__ == "__main__":
 
 #--------- 히스토리 출력 기능 ----------
 
-def show_history(self):
-        """전체 게임 기록 출력"""
-        if not self.history:
-            print("\n아직 진행된 게임 기록이 없습니다.")
-            return
+    def show_history(self):
+            """전체 게임 기록 출력"""
+            if not self.history:
+                print("\n아직 진행된 게임 기록이 없습니다.")
+                return
 
-        print("\n==== 📜 점수 기록 히스토리 ====")
-        for i, rec in enumerate(self.history, start=1):
-            print(f"{i}. [{rec['date']}] Total: {rec['total']}문제 | 정답: {rec['score']}개")
+            print("\n==== 📜 점수 기록 히스토리 ====")
+            for i, rec in enumerate(self.history, start=1):
+                print(f"{i}. [{rec['date']}] Total: {rec['total']}문제 | 정답: {rec['score']}개")
