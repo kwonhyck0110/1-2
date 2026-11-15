@@ -986,8 +986,11 @@ git branch -d feature/score-save
 ---
 
 ### 10-5. 원격 저장소와 함께 쓰기 (clone + pull)
-
+![clone전](sc/clone_전.png)
+↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 ![clone pull 사용 증거](sc/git_clone.png)
+↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+![clone후](sc/clone_후.png)
 
 협업 시 가장 많이 쓰는 흐름이에요!
 
@@ -995,7 +998,7 @@ git branch -d feature/score-save
 
 ```bash
 # GitHub 저장소를 내 컴퓨터로 복제
-git clone https://github.com/사용자명/quiz-project.git
+git clone https://github.com/kwonhyck0110/1-2.git
 
 # 복제된 폴더로 이동
 cd quiz-project
