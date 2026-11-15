@@ -972,7 +972,7 @@ feature           ●────●────●──
                  (새 기능 개발)
 ```
 git commit --graph를 활용한 브랜치 병합 로그
-![git commit graph 로그](<sc/git log --graph.png>)
+![git commit graph 로그](<sc/git log --graph --oneline -all.png>)
 
 #### 🔹 왜 브랜치를 쓸까요?
 
