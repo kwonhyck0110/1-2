@@ -998,7 +998,7 @@ git branch -d feature/score-save
 
 ```bash
 # GitHub 저장소를 내 컴퓨터로 복제
-git clone https://github.com/kwonhyck0110/1-2.git
+git clone https://github.com/kwonhyck0110/1-2.gitpu
 
 # 복제된 폴더로 이동
 cd quiz-project
