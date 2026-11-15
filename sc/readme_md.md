@@ -1,6 +1,7 @@
 # 📘 전기·반도체 기초 상식 퀴즈 프로그램
 
 ## 1. 프로젝트 개요
+
 이 프로젝트는 Python 기초 문법(변수, 자료형, 제어문, 함수), 객체지향 설계(클래스와 객체), 파일 입출력(JSON), 그리고 Git 버전 관리 개념을 학습하고 복습하기 위해 개발한 **콘솔 기반 대화형 퀴즈 프로그램**입니다.
 
 사용자는 등록된 문제를 무작위 순서로 풀며 실시간으로 정답 여부를 확인하고, 새로운 퀴즈를 추가하거나 불필요한 문제를 삭제할 수 있습니다. 또한 모든 문제 데이터와 최고 점수, 플레이 히스토리는 프로젝트 루트의 `state.json` 파일에 안전하게 저장되어 프로그램을 종료한 뒤 재실행해도 데이터가 그대로 유지됩니다.
@@ -8,6 +9,7 @@
 ---
 
 ## 2. 퀴즈 주제와 선정 이유
+
 * **주제**: 전기 및 반도체 공학 기초 상식 퀴즈
 * **선정 이유**:
   * **전공 지식 활용**: 전기 및 반도체 공학의 핵심 기초 개념(단위, 전류 종류, 소재)과 주요 과학자·인물의 업적을 퀴즈 형태로 구성하여 전공 기초를 자연스럽게 복습하고자 했습니다.
@@ -38,6 +40,7 @@ rm state.json
 ---
 
 ## 4. 주요 기능 목록
+
 1. **🎲 퀴즈 풀기 (무작위 출제)**: `random.shuffle()`을 사용해 등록된 문제를 매번 다른 순서로 출제하고, 즉시 정답 판별 및 점수를 계산합니다.
 2. **➕ 퀴즈 추가**: 사용자가 직접 문제, 4개의 선택지, 정답 번호(1~4)를 입력하여 새로운 퀴즈를 등록합니다.
 3. **📋 퀴즈 목록 보기**: 현재 저장되어 있는 전체 퀴즈의 문제, 보기, 정답 번호를 한눈에 조회합니다.
@@ -49,6 +52,7 @@ rm state.json
 ---
 
 ## 5. 파일 구조
+
 ```text
 1-2/
 ├── sc/               # 실행 결과 및 Git 워크플로우 증빙 스크린샷 폴더
@@ -102,83 +106,219 @@ rm state.json
 | `choices` | `list[str]` | 4개의 객관식 선택지 목록 |
 | `answer` | `int` | 정답 번호 (**1부터 시작**, 1~4 사이의 정수) |
 
-> 💡 **참고**: 배열 인덱스(0~3)와 달리 사용자 직관성을 위해 `answer`는 **1번부터 4번** 기준으로 저장됩니다. 예를 들어 `choices`가 `["볼트", "옴", "암페어", "와트"]`이고 `answer`가 `2`라면 정답은 **"옴"**입니다.
+> 💡 **참고**: 배열 인덱스(0~3)와 달리 사용자 직관성을 위해 `answer`는 **1번부터 4번** 기준으로 저장됩니다. 예를 들어 `choices`가 `["볼트", "옴", "암페어", "와트"]`이고 `answer`가 `2`라면 정답은 "옴"입니다.
 
 ---
 
-## 7. 핵심 개념 정리 및 코드 적용 사례
+## 7. 핵심 개념 정리 및 실제 코드 적용 설명
 
-이 프로젝트를 개발하면서 배운 Python, 객체지향, 파일 입출력, Git의 핵심 개념들이 실제 코드에서 어떻게 동작하는지 정리했습니다.
+이 프로젝트를 개발하면서 배운 Python, 객체지향, 파일 입출력, Git의 핵심 개념들이 **실제 작성한 코드에서 어떻게 동작하는지** 직접 인용하여 설명합니다.
 
 ### 7-1. Python 기초 문법
 
 #### 🔹 변수 (Variable)
-변수는 프로그램이 실행되는 동안 데이터를 메모리에 담아두고 이름으로 불러 쓰는 저장 공간입니다. 같은 값을 여러 번 재사용하거나 상태 변화(점수 증가 등)를 추적하기 위해 사용합니다.
-* **코드 적용**: `score = 0`(현재 맞힌 개수), `total = len(play_quizzes)`(전체 문제 수)처럼 게임 진행 상태를 추적할 때 활용했습니다.
+변수는 프로그램 실행 중 필요한 데이터를 메모리에 담아두고 이름으로 재사용하거나 상태 변화를 추적하기 위해 사용합니다.
+* **내 코드에서의 활용 (`play_quiz` 및 상수 선언)**:
+```python
+STATE_FILE = "state.json"
+BACKUP_FILE = "state.json.bak"
+
+score = 0
+total = len(play_quizzes)
+```
+> 파일 경로를 상수 변수(`STATE_FILE`)로 관리해 오타를 줄이고, 게임 중 맞힌 개수(`score`)와 전체 문항 수(`total`)를 변수에 담아 실시간으로 점수를 집계했습니다.
 
 #### 🔹 주요 자료형 (`int`, `str`, `bool`, `list`, `dict`)
-| 자료형 | 특징 및 용도 | 프로젝트 내 실제 활용 사례 |
+| 자료형 | 설명 | 내 코드에서의 실제 사용 예시 |
 | :--- | :--- | :--- |
-| **`int`** (정수) | 사칙연산 및 크기 비교가 가능한 숫자 | 정답 번호(`2`), 맞힌 점수(`score`), 최고 기록(`best_score`) |
-| **`str`** (문자열) | 텍스트 데이터를 표현 | 문제 지문(`question`), 선택지 문구, 기록 일시(`"2026-11-11 12:00:00"`) |
-| **`bool`** (논리형) | 참(`True`) 또는 거짓(`False`) 판별 | `quiz.is_correct(user_ans)` 메서드의 정답 일치 여부 반환값 |
-| **`list`** (리스트) | 순서가 있고 수정(`append`, `pop`) 가능한 목록 | 4지선다 보기(`choices`), 전체 퀴즈 목록(`self.quizzes`), 기록(`self.history`) |
-| **`dict`** (딕셔너리) | `Key: Value` 쌍으로 데이터를 구조화하여 빠르게 조회 | JSON 파일로 저장·복원하기 위한 직렬화 데이터 구조(`to_dict()`) |
+| **`int`** | 정수 데이터 | `self.best_score = 0`, 정답 번호 `2` |
+| **`str`** | 문자열 데이터 | `now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")`, 문제 지문 |
+| **`bool`** | 참(`True`)/거짓(`False`) 논리값 | `return user_answer == self.answer` (`is_correct`의 반환값) |
+| **`list`** | 순서가 있고 수정 가능한 목록 | `self.quizzes = []`, `choices = ["볼트", "옴", "암페어", "와트"]` |
+| **`dict`** | `Key: Value` 쌍으로 구조화된 데이터 | `record = {"date": now_str, "total": total, "score": score}` |
 
 #### 🔹 조건문 (`if` / `elif` / `else`)
 조건식의 참·거짓 여부에 따라 프로그램의 실행 흐름을 분기합니다.
-* **코드 적용**: 메인 메뉴(`run()`)에서 사용자가 선택한 번호(`1`~`7`)에 따라 각기 다른 기능을 호출하거나, `play_quiz()`에서 정답 여부에 따라 점수를 올리고 최고 기록 갱신 여부를 판단할 때 사용했습니다.
+* **내 코드에서의 활용 (`run` 메뉴 분기 및 `play_quiz` 채점)**:
+```python
+# 1) 메뉴 선택에 따른 다중 분기 (run)
+if choice == 1:
+    self.play_quiz()
+elif choice == 2:
+    self.add_quiz()
+elif choice == 3:
+    self.list_quizzes()
+elif choice == 4:
+    self.show_best_score()
+elif choice == 5:
+    self.show_history()
+elif choice == 6:
+    self.delete_quiz()
+elif choice == 7:
+    print("프로그램을 종료합니다. 안녕히 가세요!")
+    self.save()
+    break
+
+# 2) 정답 판별 및 최고 점수 갱신 (play_quiz)
+if quiz.is_correct(user_ans):
+    print("정답입니다! 🎉")
+    score += 1
+else:
+    print(f"오답입니다. 정답은 {quiz.answer}번 이었어요.")
+```
 
 #### 🔹 반복문 (`for` vs `while`)
-* **`for` 문**: 리스트나 범위(`range`)처럼 **반복할 대상과 횟수가 명확할 때** 사용합니다. (예: 전체 퀴즈 목록을 1번부터 끝까지 순회하며 출제할 때)
-* **`while` 문**: 종료 조건이 만족될 때까지 **횟수 제한 없이 계속 반복해야 할 때** 사용합니다. (예: 사용자가 `7) 종료`를 누르기 전까지 메뉴를 계속 띄우거나, `read_int()`에서 올바른 숫자를 입력할 때까지 재입력을 요구할 때)
+* **`for` 문**: 리스트나 범위처럼 **반복할 대상이 정해져 있을 때** 사용합니다.
+```python
+# 등록된 문제 수만큼 순회하며 문제 출력 (play_quiz)
+for i, quiz in enumerate(play_quizzes, start=1):
+    quiz.show(index=i)
+    user_ans = self.read_int("정답 번호 입력 (1~4): ", 1, 4)
+```
+* **`while` 문**: 종료 조건이 만족될 때까지 **횟수 제한 없이 계속 반복해야 할 때** 사용합니다.
+```python
+# 올바른 범위의 정수가 입력될 때까지 무한 반복 검증 (read_int)
+while True:
+    raw = input(prompt).strip()
+    if not raw:
+        print("빈 입력입니다. 다시 입력해주세요.")
+        continue
+    ...
+    return val
+```
 
-#### 🔹 함수 (Function)
-특정 기능을 수행하는 코드 블록을 `def` 키워드로 묶어 재사용성과 가독성을 높입니다. 외부에서 입력값을 받는 **매개변수(Parameter)**와 실행 결과를 돌려주는 **반환값(`return`)**으로 구성됩니다.
-* **코드 적용**: 숫자 입력 검증 로직을 `read_int(self, prompt, min_v, max_v)` 함수로 분리하여 메뉴 선택, 정답 입력, 퀴즈 삭제 번호 입력 등 여러 곳에서 중복 코드 없이 재사용했습니다.
+#### 🔹 함수 (Function) — 매개변수와 반환값 활용
+반복되는 로직을 `def`로 묶어 매개변수(Parameter)로 입력을 받고 `return`으로 결과를 돌려주어 코드 중복을 없앴습니다.
+* **내 코드에서의 활용 (`read_int`, `is_correct`)**:
+```python
+# 매개변수(prompt, min_v, max_v)를 받아 검증 후 정수(val)를 반환(return)
+def read_int(self, prompt, min_v, max_v):
+    """정수 범위를 검증하는 입력 함수"""
+    while True:
+        ...
+        if val < min_v or val > max_v:
+            print(f"{min_v}~{max_v} 사이의 숫자를 입력해주세요.")
+            continue
+        return val
+```
+> 이 함수 하나를 만들어 둔 덕분에 메뉴 선택(`1~7`), 정답 입력(`1~4`), 퀴즈 삭제 번호(`1~len(self.quizzes)`) 등 모든 숫자 입력에서 재사용할 수 있었습니다.
 
 ---
 
 ### 7-2. 클래스와 객체 (객체지향 설계)
 
-#### 🔹 클래스(Class)와 객체(Object)를 사용하는 이유
-클래스는 관련된 **데이터(속성)**와 **기능(메서드)**을 하나로 묶어낸 **설계도**이며, 이 설계도를 바탕으로 메모리에 생성된 실체를 **객체(인스턴스)**라고 합니다. 퀴즈 데이터가 늘어날 때마다 변수들을 따로 관리하면 구조가 복잡해지므로, 역할에 따라 두 개의 클래스로 책임을 명확히 분리했습니다.
+#### 🔹 클래스 분리 설계 (`Quiz` vs `QuizGame`)
+데이터와 기능을 하나의 설계도로 묶기 위해 책임을 두 클래스로 명확히 분리했습니다.
 
-* **`Quiz` 클래스 (개별 문제 데이터 모델)**
-  * 하나의 문제가 가지는 질문(`question`), 보기(`choices`), 정답(`answer`) 속성을 캡슐화합니다.
-  * 문제 출력(`show`), 정답 판별(`is_correct`), JSON 변환(`to_dict`, `from_dict`) 기능을 전담합니다.
-* **`QuizGame` 클래스 (게임 전체 흐름 및 상태 컨트롤러)**
-  * 프로그램의 전체 생명주기를 총괄합니다.
-  * **주요 책임**:
-    1. **파일 입출력 및 복구**: `state.json` 데이터 불러오기(`load`), 저장(`save`), 손상 시 백업 생성
-    2. **콘솔 메뉴 제어**: 사용자 메뉴 출력(`show_menu`) 및 기능 분기 실행(`run`)
-    3. **게임 운영 및 기록 관리**: 무작위 셔플 출제(`play_quiz`), 퀴즈 추가(`add_quiz`)·삭제(`delete_quiz`), 최고 점수 및 일시별 히스토리 관리(`show_history`)
-    4. **입력 안전성 보장**: 빈 문자열이나 범위 밖 숫자를 걸러내는 입력 검증(`read_int`, `read_text`)
+1. **`Quiz` 클래스**: 개별 퀴즈 1개의 데이터(속성)와 문제 출력·정답 판별·딕셔너리 변환(메서드)을 담당합니다.
+```python
+class Quiz:
+    """개별 퀴즈를 표현하는 클래스"""
+    def __init__(self, question, choices, answer):
+        self.question = question  # 속성(Attribute)
+        self.choices = choices
+        self.answer = answer
+
+    def is_correct(self, user_answer):  # 메서드(Method)
+        """정답 여부 판별"""
+        return user_answer == self.answer
+
+    def to_dict(self):
+        """JSON 변환용 dict"""
+        return {
+            "question": self.question,
+            "choices": self.choices,
+            "answer": self.answer,
+        }
+```
+
+2. **`QuizGame` 클래스**: 게임 전체의 상태 관리, 파일 입출력(`load`, `save`), 메뉴 흐름(`run`), 히스토리 및 퀴즈 추가/삭제를 총괄합니다.
+```python
+class QuizGame:
+    def __init__(self):
+        self.quizzes = []
+        self.best_score = 0
+        self.history = []  # 점수 히스토리 리스트 추가
+        self.load()        # 객체 생성 시 자동으로 기존 데이터 로드
+```
 
 #### 🔹 `__init__` 메서드와 `self`의 역할
-* **`__init__` (생성자)**: `Quiz(...)` 또는 `QuizGame()`으로 새 객체를 생성할 때 자동으로 호출되어 초기 속성을 세팅합니다. `QuizGame`의 경우 객체 생성과 동시에 `self.load()`를 호출해 기존 저장 데이터를 자동으로 불러옵니다.
-* **`self`**: 메서드를 호출한 **객체 자기 자신**을 가리키는 첫 번째 매개변수입니다. `self`가 있기 때문에 여러 개의 `Quiz` 객체가 각각 서로 다른 문제와 정답 데이터를 독립적으로 유지할 수 있습니다.
-
-#### 🔹 속성(Attribute)과 메서드(Method) 구분
-* **속성 (데이터)**: 객체가 보유한 상태 값 (예: `self.question`, `self.quizzes`, `self.best_score`)
-* **메서드 (동작)**: 객체가 수행하는 함수 (예: `quiz.is_correct()`, `game.play_quiz()`, `game.save()`)
+* **`__init__`**: 객체가 생성될 때 자동 실행되는 생성자로, `Quiz`에서는 문제·보기·정답을 초기화하고 `QuizGame`에서는 게임 상태 리스트를 초기화한 뒤 `self.load()`를 호출합니다.
+* **`self`**: 메서드를 호출한 **객체 자기 자신**을 가리킵니다. 예를 들어 `quiz.is_correct(user_ans)`가 호출될 때 `self.answer`는 현재 출제 중인 바로 그 `quiz` 객체의 정답 번호를 참조합니다.
 
 ---
 
 ### 7-3. 파일 입출력과 예외 처리
 
-#### 🔹 안전한 파일 열기·읽기·쓰기 (`with open`)
-프로그램이 종료되어도 데이터가 날아가지 않도록 `with open(파일명, 모드, encoding="utf-8")` 구문을 사용합니다. `with` 블록을 벗어나면 파일이 자동으로 닫히므로 리소스 누수나 파일 손상을 방지할 수 있으며, `encoding="utf-8"` 지정을 통해 한글 깨짐을 예방합니다.
+#### 🔹 안전한 파일 읽기·쓰기 (`with open` & JSON)
+`with open(..., encoding="utf-8")` 구문을 사용해 작업이 끝나면 파일이 자동으로 닫히도록 하고, `ensure_ascii=False` 옵션으로 한글이 깨지지 않고 그대로 `state.json`에 기록되도록 구현했습니다.
 
-#### 🔹 JSON 형식을 사용하는 이유
-JSON(JavaScript Object Notation)은 중괄호(`{}`)와 대괄호(`[]`)로 이루어진 텍스트 기반 데이터 포맷입니다. Python의 `dict` 및 `list` 자료형과 구조가 1:1로 일치하여 `json.load()`(읽기)와 `json.dump()`(저장)만으로 복잡한 객체 데이터를 손쉽게 변환하고 사람이 직접 열어볼 수도 있습니다.
+```python
+# 저장 로직 (save)
+data = {
+    "quizzes": [q.to_dict() for q in self.quizzes],
+    "best_score": self.best_score,
+    "history": getattr(self, "history", []),
+}
+with open(STATE_FILE, "w", encoding="utf-8") as f:
+    json.dump(data, f, ensure_ascii=False, indent=2)
+```
 
-#### 🔹 예외 처리 (`try` / `except`) 및 복구 절차
-실행 중 예기치 못한 오류로 프로그램이 강제 종료(Crash)되는 것을 막기 위해 다단계 예외 처리를 적용했습니다.
-* **`FileNotFoundError` 대응**: 첫 실행 시 `state.json`이 없으면 오류 대신 기본 6문항(`get_default_quizzes()`)으로 게임을 시작합니다.
-* **`PermissionError` 대응**: 파일 읽기/쓰기 권한이 거부된 경우 안내 메시지를 출력하고 안전하게 동작을 이어갑니다.
-* **`JSONDecodeError` 등 손상 복구 절차**: 파일 내용이 깨졌을 경우 `shutil.copy()`로 원본을 `state.json.bak`에 백업해 둔 뒤, 기본 데이터로 복구하여 게임 진행을 보장합니다.
-* **`ValueError` 대응**: 숫자를 입력해야 하는 곳에 문자를 입력해도 프로그램이 멈추지 않고 재입력을 안내합니다.
+#### 🔹 실제 코드로 구현한 예외 처리 및 복구 절차 (`try` / `except`)
+프로그램 실행 중 예상치 못한 오류가 발생해도 비정상 종료되지 않도록 단계별 예외 처리를 작성했습니다.
+
+1. **파일이 없는 경우 (`os.path.exists`)**: 에러를 내는 대신 기본 6문항을 불러와 바로 게임을 시작합니다.
+```python
+if not os.path.exists(STATE_FILE):
+    print("저장된 데이터가 없어 기본 퀴즈로 시작합니다.")
+    self.quizzes = Quiz.get_default_quizzes()
+    self.best_score = 0
+    self.history = []
+    return
+```
+
+2. **파일 읽기/쓰기 권한 오류 (`PermissionError`)**: 권한 부족 시 사용자에게 원인을 안내하고 기본 데이터로 안전하게 동작을 유지합니다.
+```python
+except PermissionError:
+    # 1. 권한 오류 처리 (PermissionError)
+    print("[오류] state.json 파일 읽기 권한이 없습니다. 권한을 확인해주세요.")
+    self.quizzes = Quiz.get_default_quizzes()
+    self.best_score = 0
+    self.history = []
+```
+
+3. **JSON 파일 손상 시 백업 생성 및 복구 (`JSONDecodeError` 등)**: 손상된 파일을 `shutil.copy`로 `state.json.bak`에 백업해 둔 뒤 기본 퀴즈 데이터로 복구합니다.
+```python
+except (json.JSONDecodeError, KeyError, ValueError, TypeError) as e:
+    # 2. 데이터 손상 시 백업 생성 및 복구 절차
+    print(f"[경고] 데이터 파일이 손상되었습니다 ({e}).")
+    try:
+        shutil.copy(STATE_FILE, BACKUP_FILE)
+        print(f"[알림] 손상된 이전 파일은 '{BACKUP_FILE}'로 백업되었습니다.")
+    except Exception as backup_err:
+        print(f"[오류] 백업 생성 실패: {backup_err}")
+
+    print("기본 퀴즈 데이터로 복구하여 시작합니다.")
+    self.quizzes = Quiz.get_default_quizzes()
+    self.best_score = 0
+    self.history = []
+```
+
+4. **사용자 입력 오류 및 강제 종료(`Ctrl+C`) 대응**: 문자를 잘못 입력했을 때(`ValueError`) 재입력을 유도하고, `Ctrl+C`(`KeyboardInterrupt`)로 종료할 때도 현재 상태를 자동 저장합니다.
+```python
+# 숫자 변환 실패 처리 (read_int)
+try:
+    val = int(raw)
+except ValueError:
+    print("숫자만 입력해 주세요.")
+    continue
+
+# 강제 종료 시 안전 저장 (run)
+except (KeyboardInterrupt, EOFError):
+    print("\n입력이 중단되었습니다. 저장 후 안전하게 종료합니다.")
+    self.save()
+    break
+```
 
 ---
 
@@ -280,6 +420,7 @@ git merge feature/quiz-game         # 3. 개발 완료된 기능 병합
 ---
 
 ## 10. 작성자 정보
+
 * **작성자**: 권혁 (`kwonhyck0110`)
-* **GitHub 저장소**: [https://github.com/kwonhyck0110/1-2.git](https://github.com/kwonhyck0110/1-2.git)
+* **GitHub 저장소**: <https://github.com/kwonhyck0110/1-2.git>
 * **최종 수정일**: 2026-11-11
